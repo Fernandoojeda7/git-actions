@@ -17,7 +17,7 @@ on:
     branches: ["main"]
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: thermal-loop-414917
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
   GKE_CLUSTER: thermal-loop-414917 # TODO: update to cluster name
   GKE_ZONE: us-central1 # TODO: update to cluster zone
