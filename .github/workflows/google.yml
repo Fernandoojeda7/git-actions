@@ -16,11 +16,6 @@ on:
   push:
     branches:
       - main
-  workflow_call:
-    secrets:
-      GCP_CREDENTIALS:
-        required: true
-
 env:
   PROJECT_ID: ${{secrets.GKE_PROJECT}}
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
@@ -48,7 +43,7 @@ jobs:
         name: Autenticar en Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       # Opción alternativa: autenticación mediante credenciales json
 
