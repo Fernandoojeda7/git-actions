@@ -71,7 +71,7 @@ jobs:
       - name: Publicar
         run: |-
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          docker push $DOCKER_USERNAME/$REPOSITORY:$GITHUB_SHA
+          docker push $REPOSITORY:$GITHUB_SHA
         env:
           DOCKER_USERNAME: fernandoojeda7
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
