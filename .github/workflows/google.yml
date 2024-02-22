@@ -53,7 +53,7 @@ jobs:
 
       # Obtener las credenciales de GKE para poder desplegar en el clúster
       - name: Configurar credenciales de GKE
-        uses: google-github-actions/get-gke-credentials@v0
+        uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
@@ -62,20 +62,19 @@ jobs:
       - name: Compilar
         run: |-
           docker build \
-            --tag "gcr.io/thermal-loop-414917/node-app:$GITHUB_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
 
-      # Autenticar y publicar la imagen de Docker en Google Container Registry (GCR)
+      # Publicar la imagen de Docker en Docker Hub
       - name: Publicar
         run: |-
-          echo "$GCLOUD_SERVICE_KEY" | base64 -d > gcloud-key.json
-          gcloud auth activate-service-account --key-file gcloud-key.json
-          gcloud auth configure-docker
-          docker push gcr.io/thermal-loop-414917/node-app:$GITHUB_SHA
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker push $DOCKER_USERNAME/$REPOSITORY:$GITHUB_SHA
         env:
-          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          DOCKER_USERNAME: fernandoojeda7
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
