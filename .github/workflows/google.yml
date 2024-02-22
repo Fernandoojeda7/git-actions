@@ -23,7 +23,7 @@ env:
   GKE_ZONE: us-central1 # TODO: update to cluster zone
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
   REPOSITORY: git-actions # TODO: update to Artifact Registry docker repository
-  IMAGE: node-app
+  IMAGE: gcr.io/thermal-loop-414917/node-app
 
 jobs:
   setup-build-publish-deploy:
@@ -45,7 +45,7 @@ jobs:
 
       # Get the GKE credentials so we can deploy to the cluster
       - name: Set up GKE credentials
-        uses: google-github-actions/get-gke-credentials@v0
+        uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
