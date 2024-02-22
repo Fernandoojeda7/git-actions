@@ -27,7 +27,7 @@ env:
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+    name: Configurar, Compilar, Publicar y Desplegar
     runs-on: ubuntu-latest
     environment: production
 
@@ -39,24 +39,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Configurar la autenticación con Google Cloud mediante Workload Identity Federation y generar un token de acceso.
       - id: "auth"
-        uses: "google-github-actions/auth@v1"
+        name: "Autenticar en Google Cloud"
+        uses: "google-github-actions/auth@v0"
         with:
-          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+          token_format: "access_token"
+          workload_identity_provider: "projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider"
+          service_account: "my-service-account@my-project.iam.gserviceaccount.com"
 
-      - name: Docker configuration
+      # Opción alternativa: autenticación mediante credenciales json
+      # - id: "auth"
+      #   uses: "google-github-actions/auth@v1"
+      #   with:
+      #     credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+
+      - name: Configuración de Docker
         run: |-
           gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev
 
-      # Get the GKE credentials so we can deploy to the cluster
-      - name: Set up GKE credentials
+      # Obtener las credenciales de GKE para poder desplegar en el clúster
+      - name: Configurar credenciales de GKE
         uses: google-github-actions/get-gke-credentials@v0
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
-      # Build the Docker image
-      - name: Build
+      # Construir la imagen de Docker
+      - name: Compilar
         run: |-
           docker build \
             --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
@@ -64,13 +74,13 @@ jobs:
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
 
-      # Push the Docker image to Google Artifact Registry
-      - name: Publish
+      # Publicar la imagen de Docker en Google Artifact Registry
+      - name: Publicar
         run: |-
           docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
 
-      # Deploy the Docker image to the GKE cluster
-      - name: Deploy
+      # Desplegar la imagen de Docker en el clúster de GKE
+      - name: Desplegar
         run: |-
           kubectl apply -f app.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
