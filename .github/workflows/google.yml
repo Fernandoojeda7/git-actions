@@ -53,7 +53,7 @@ jobs:
 
       # Obtener las credenciales de GKE para poder desplegar en el clúster
       - name: Configurar credenciales de GKE
-        uses: google-github-actions/get-gke-credentials@v1
+        uses: google-github-actions/get-gke-credentials@v0
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
