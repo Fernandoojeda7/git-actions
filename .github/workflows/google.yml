@@ -75,7 +75,7 @@ jobs:
           gcloud auth configure-docker
           docker push gcr.io/thermal-loop-414917/node-app:$GITHUB_SHA
         env:
-          GCLOUD_SERVICE_KEY: ${{ secrets.GCP_CREDENTIALS }}
+          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
