@@ -19,10 +19,10 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1 # TODO: update region of the Artifact Registry
-  GKE_CLUSTER: git-actions-cluste # TODO: update to cluster name
+  GKE_CLUSTER: thermal-loop-414917 # TODO: update to cluster name
   GKE_ZONE: us-central1 # TODO: update to cluster zone
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
-  REPOSITORY: thermal-loop-414917 # TODO: update to Artifact Registry docker repository
+  REPOSITORY: git-actions # TODO: update to Artifact Registry docker repository
   IMAGE: node-app
 
 jobs:
