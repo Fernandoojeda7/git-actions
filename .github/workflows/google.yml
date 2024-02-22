@@ -53,7 +53,7 @@ jobs:
 
       # Obtener las credenciales de GKE para poder desplegar en el clúster
       - name: Configurar credenciales de GKE
-        uses: google-github-actions/get-gke-credentials@v0
+        uses: google-github-actions/get-gke-credentials@v1
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
@@ -67,10 +67,14 @@ jobs:
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
 
-      # Publicar la imagen de Docker en Google Artifact Registry
+      # Publicar la imagen de Docker en Docker Hub
       - name: Publicar
         run: |-
-          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker push $DOCKER_USERNAME/$REPOSITORY:$GITHUB_SHA
+        env:
+          DOCKER_USERNAME: fernandoojeda7
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
