@@ -14,7 +14,12 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+  workflow_call:
+    secrets:
+      GCP_CREDENTIALS:
+        required: true
 
 env:
   PROJECT_ID: ${{secrets.GKE_PROJECT}}
@@ -36,16 +41,14 @@ jobs:
       id-token: "write"
 
     steps:
-      - id: "auth"
-        uses: "google-github-actions/auth@v2"
+      - name: git checkout
+        uses: actions/checkout@v3
+
+      - id: auth
+        name: Autenticar en Google Cloud
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
-
-      - id: "get-credentials"
-        uses: "google-github-actions/get-gke-credentials@v2"
-        with:
-          cluster_name: "git-actions-cluste"
-          location: "us-central1"
 
       # Opción alternativa: autenticación mediante credenciales json
 
