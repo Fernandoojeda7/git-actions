@@ -16,6 +16,6 @@ spec: # Especificaciones del despliegue
     spec: # Tiene sus especificaciones
       containers: # Información del contenedors o mas si el pod tiene muchos
         - name: node-app # Nombre del contenedor
-          image: fernandoojeda7/git-actions # url de imagen, docker hub defautl
+          image: gcr.io/thermal-loop-414917/node-app # url de imagen, docker hub defautl
           ports: # puertos
             - containerPort: 3000 # puerto 3000
