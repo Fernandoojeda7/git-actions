@@ -22,8 +22,8 @@ env:
   GKE_CLUSTER: git-actions-cluste # TODO: update to cluster name
   GKE_ZONE: us-central1 # TODO: update to cluster zone
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
-  REPOSITORY: gcr.io/${{secrets.GKE_PROJECT}}/node-app # TODO: update to Artifact Registry docker repository
-  IMAGE: gcr.io/thermal-loop-414917/node-app
+  REPOSITORY: git-actions # TODO: update to Artifact Registry docker repository
+  IMAGE: node-app
 
 jobs:
   setup-build-publish-deploy:
@@ -62,7 +62,7 @@ jobs:
       - name: Compilar
         run: |-
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/${{env.PROJECT_ID}}/${{env.REPOSITORY}}/${{env.IMAGE}}:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
@@ -71,7 +71,7 @@ jobs:
       - name: Publicar
         run: |-
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-          docker push $REPOSITORY:$GITHUB_SHA
+          docker push ${{env.DOCKER_USERNAME}}/${{env.IMAGE}}:$GITHUB_SHA
         env:
           DOCKER_USERNAME: fernandoojeda7
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
