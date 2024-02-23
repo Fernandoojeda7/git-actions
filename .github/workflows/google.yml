@@ -24,7 +24,6 @@ env:
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
   REPOSITORY: fernandoojeda7/git-actions # TODO: update to Artifact Registry docker repository
   IMAGE: node-app
-  IMAGE_TAG: test
 
 jobs:
   setup-build-publish-deploy:
@@ -59,11 +58,17 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
 
+      - name: Obtener SHA del commit
+        run: |
+          GIT_COMMIT_SHA=$(git rev-parse HEAD)
+          echo "SHA del commit actual: $GIT_COMMIT_SHA"
+        shell: bash
+
       # Construir la imagen de Docker
       - name: Compilar
         run: |-
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GIT_COMMIT_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
@@ -71,7 +76,7 @@ jobs:
       # Publicar la imagen de Docker en Docker Hub
       - name: Publicar
         run: |-
-          docker push "$REPOSITORY:$IMAGE_TAG" \
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GIT_COMMIT_SHA" \
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
