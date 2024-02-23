@@ -45,8 +45,6 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
-      # Opción alternativa: autenticación mediante credenciales json
-
       - name: Configuración de Docker
         run: |-
           gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev
@@ -57,6 +55,10 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
+
+      - name: Configuración de Docker
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Obtener SHA del commit
         run: |
