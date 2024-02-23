@@ -68,7 +68,7 @@ jobs:
       - name: Compilar
         run: |-
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GIT_COMMIT_SHA" \
+            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
             .
@@ -76,7 +76,7 @@ jobs:
       # Publicar la imagen de Docker en Docker Hub
       - name: Publicar
         run: |-
-          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GIT_COMMIT_SHA" \
+          docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
