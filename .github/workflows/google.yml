@@ -24,6 +24,7 @@ env:
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
   REPOSITORY: fernandoojeda7/git-actions # TODO: update to Artifact Registry docker repository
   IMAGE: node-app
+  IMAGE_TAG: test
 
 jobs:
   setup-build-publish-deploy:
@@ -70,7 +71,7 @@ jobs:
       # Publicar la imagen de Docker en Docker Hub
       - name: Publicar
         run: |-
-          docker push "$REPOSITORY/$IMAGE:$GITHUB_SHA" \
+          docker push "$REPOSITORY:$IMAGE_TAG" \
 
       # Desplegar la imagen de Docker en el clúster de GKE
       - name: Desplegar
