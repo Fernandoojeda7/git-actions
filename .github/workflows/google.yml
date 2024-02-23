@@ -77,5 +77,7 @@ jobs:
       - name: Desplegar
         run: |-
           kubectl apply -f app.yaml
+          kubectl apply -f service-node.yaml
+          kubectl apply -f basic-ingress.yaml
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
