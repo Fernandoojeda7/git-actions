@@ -23,7 +23,7 @@ env:
   GKE_ZONE: us-central1 # TODO: update to cluster zone
   DEPLOYMENT_NAME: node-deployment # TODO: update to deployment name
   REPOSITORY: fernandoojeda7/git-actions # TODO: update to Artifact Registry docker repository
-  IMAGE: node-app
+  IMAGE: gcr.io/thermal-loop-414917/node-app
 
 jobs:
   setup-build-publish-deploy:
