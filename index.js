@@ -5,7 +5,7 @@ const app = express();
 app.use(morgan("dev"));
 app.get("/", (req, res) => {
   console.log("Request: Hello Equipzilla!");
-  res.send("Hello Equipzilla!");
+  res.send("Hello Equipzilla, Good Morning!");
 });
 
 app.listen(3000, () => {
