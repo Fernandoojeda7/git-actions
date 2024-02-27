@@ -38,6 +38,10 @@ jobs:
         with:
           credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
 
+      # Agregar la línea de comando para obtener las credenciales de Kubernetes
+      - name: Obtener credenciales de Kubernetes
+        run: gcloud container clusters get-credentials git-actions-cluste --region us-central1 --project thermal-loop-414917
+
       # - name: Configuración de Docker en Google Cloud
       #   run: |-
       #     gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev
